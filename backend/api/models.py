@@ -1,28 +1,67 @@
+"""
+Models API
+
+Lists every AI model currently loaded
+in the application.
+"""
+
 from fastapi import APIRouter
 
-from backend.services.model_registry import (
-    get_all_models
+from backend.ai.common.model_registry import (
+    registry,
 )
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/models",
+    tags=["Models"],
+)
 
 
-@router.get("/models")
+@router.get("/")
 def list_models():
 
-    models = get_all_models()
+    metadata = registry.get_all_metadata()
 
-    response = {}
+    models = []
 
-    for key, model in models.items():
+    for key, info in metadata.items():
 
-        response[key] = {
-            "name": model.name,
-            "version": model.version,
-            "model_type": model.model_type,
-            "accuracy": model.accuracy,
-            "checkpoint_path": model.checkpoint_path,
-            "loaded": model.loaded
-        }
+        models.append(
 
-    return response
+            {
+
+                "id": key,
+
+                "name": info.name,
+
+                "version": info.version,
+
+                "media_type": info.media_type,
+
+                "architecture": info.architecture,
+
+                "framework": info.framework,
+
+                "task": info.task,
+
+                "device": info.device,
+
+                "description": info.description,
+
+                "author": info.author,
+
+                "loaded": registry.is_loaded(key),
+
+            }
+
+        )
+
+    return {
+
+        "total_models": registry.total_models(),
+
+        "loaded_models": registry.total_models(),
+
+        "models": models,
+
+    }

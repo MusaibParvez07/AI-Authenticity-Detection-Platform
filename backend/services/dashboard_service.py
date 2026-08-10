@@ -1,14 +1,24 @@
+from datetime import datetime
+
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from backend.models.upload import Upload
 from backend.models.detection_result import DetectionResult
 
+from backend.services.model_registry import (
+    get_all_models,
+)
+
 
 def get_dashboard_statistics(
     db: Session,
-    user_id: int
+    user_id: int,
 ):
+
+    # ----------------------------------------
+    # Total Uploads
+    # ----------------------------------------
 
     total_uploads = (
         db.query(Upload)
@@ -17,6 +27,10 @@ def get_dashboard_statistics(
         )
         .count()
     )
+
+    # ----------------------------------------
+    # Total Predictions
+    # ----------------------------------------
 
     total_predictions = (
         db.query(DetectionResult)
@@ -29,6 +43,10 @@ def get_dashboard_statistics(
         )
         .count()
     )
+
+    # ----------------------------------------
+    # Real Predictions
+    # ----------------------------------------
 
     real_images = (
         db.query(DetectionResult)
@@ -43,6 +61,10 @@ def get_dashboard_statistics(
         .count()
     )
 
+    # ----------------------------------------
+    # Fake Predictions
+    # ----------------------------------------
+
     fake_images = (
         db.query(DetectionResult)
         .join(
@@ -55,6 +77,10 @@ def get_dashboard_statistics(
         )
         .count()
     )
+
+    # ----------------------------------------
+    # Media Counts
+    # ----------------------------------------
 
     image_count = (
         db.query(DetectionResult)
@@ -108,6 +134,10 @@ def get_dashboard_statistics(
         .count()
     )
 
+    # ----------------------------------------
+    # Average Confidence
+    # ----------------------------------------
+
     average_confidence = (
         db.query(
             func.avg(
@@ -124,14 +154,19 @@ def get_dashboard_statistics(
         .scalar()
     )
 
-    latest = (
+    # ----------------------------------------
+    # Recent Detections
+    # ----------------------------------------
+
+    recent = (
         db.query(
             Upload.filename,
             Upload.file_type,
+            DetectionResult.media_type,
             DetectionResult.prediction,
             DetectionResult.confidence,
             DetectionResult.model_name,
-            DetectionResult.created_at
+            DetectionResult.created_at,
         )
         .join(
             DetectionResult,
@@ -143,24 +178,63 @@ def get_dashboard_statistics(
         .order_by(
             DetectionResult.created_at.desc()
         )
-        .first()
+        .limit(10)
+        .all()
     )
 
-    latest_detection = None
+    recent_detections = []
 
-    if latest:
+    for item in recent:
 
-        latest_detection = {
-            "filename": latest.filename,
-            "file_type": latest.file_type,
-            "prediction": latest.prediction,
-            "confidence": round(
-                latest.confidence,
-                4
-            ),
-            "model_name": latest.model_name,
-            "created_at": latest.created_at
-        }
+        recent_detections.append(
+            {
+                "filename": item.filename,
+                "file_type": item.file_type,
+                "media_type": item.media_type,
+                "prediction": item.prediction,
+                "confidence": round(
+                    item.confidence,
+                    4
+                ),
+                "model_name": item.model_name,
+                "created_at": item.created_at,
+            }
+        )
+
+    # ----------------------------------------
+    # Latest Detection
+    # ----------------------------------------
+
+    latest_detection = (
+        recent_detections[0]
+        if recent_detections
+        else None
+    )
+
+    # ----------------------------------------
+    # System Status
+    # ----------------------------------------
+
+    models = get_all_models()
+
+    loaded_models = sum(
+    1
+    for model in models.values()
+    if model.status.lower() == "loaded"
+)
+
+    system_status = {
+        "backend": "Online",
+        "database": "Connected",
+        "models_loaded": loaded_models,
+        "total_models": len(models),
+        "detection_engine": "Running",
+        "last_updated": datetime.utcnow().isoformat(),
+    }
+
+    # ----------------------------------------
+    # Response
+    # ----------------------------------------
 
     return {
         "total_uploads": total_uploads,
@@ -175,5 +249,7 @@ def get_dashboard_statistics(
             average_confidence,
             4
         ) if average_confidence else 0,
-        "latest_detection": latest_detection
+        "latest_detection": latest_detection,
+        "recent_detections": recent_detections,
+        "system_status": system_status,
     }

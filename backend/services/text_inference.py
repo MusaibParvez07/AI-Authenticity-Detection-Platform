@@ -1,9 +1,5 @@
 import torch
 
-from sqlalchemy.orm import Session
-
-from backend.models.detection_result import DetectionResult
-
 from backend.models.text_models.roberta_detector import (
     TextDetector
 )
@@ -18,11 +14,7 @@ _detector = TextDetector()
 _detector.eval()
 
 
-def detect_text(
-    db: Session,
-    text: str,
-    user_id: int
-):
+def predict_text(text: str):
 
     encoded = preprocess_text(
         text=text
@@ -56,23 +48,8 @@ def detect_text(
         4
     )
 
-    detection = DetectionResult(
-        upload_id=None,
-        media_type="text",
-        input_text=text,
-        prediction=label,
-        confidence=confidence,
-        model_name="AI Text Detector"
-    )
-
-    db.add(detection)
-    db.commit()
-    db.refresh(detection)
-
     return {
-        "status": "success",
         "prediction": label,
         "confidence": confidence,
-        "model_name": "AI Text Detector",
-        "detection_id": detection.id
+        "model_name": "AI Text Detector"
     }

@@ -17,6 +17,7 @@ node_modules/
 
 models/
 datasets/
+backend/weights/
 
 checkpoints/
 
@@ -27,3 +28,6 @@ coverage/
 
 dist/
 build/
+
+frontend/app 18-13-31-537/
+

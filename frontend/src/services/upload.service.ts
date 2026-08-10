@@ -11,42 +11,122 @@ export interface DetectionResponse {
 }
 
 class UploadService {
-  private getEndpoint(file: File): string {
-    const type = file.type;
+
+  private getEndpoint(
+    file: File
+  ): string {
+
+    const type = file.type.toLowerCase();
+    const name = file.name.toLowerCase();
 
     if (type.startsWith("image/")) {
-      return API_ENDPOINTS.IMAGE;
+
+      return API_ENDPOINTS.DETECTION.IMAGE;
+
     }
 
     if (type.startsWith("video/")) {
-      return API_ENDPOINTS.VIDEO;
+
+      return API_ENDPOINTS.DETECTION.VIDEO;
+
     }
 
     if (type.startsWith("audio/")) {
-      return API_ENDPOINTS.AUDIO;
+
+      return API_ENDPOINTS.DETECTION.AUDIO;
+
     }
 
-    if (type.startsWith("text/")) {
-      return API_ENDPOINTS.TEXT;
+    if (
+      type.startsWith("text/") ||
+      name.endsWith(".txt")
+    ) {
+
+      return API_ENDPOINTS.DETECTION.TEXT;
+
     }
 
-    throw new Error("Unsupported file type.");
-  }
-
-  async upload(file: File): Promise<DetectionResponse> {
-    const endpoint = this.getEndpoint(file);
-
-    const formData = new FormData();
-
-    formData.append("file", file);
-
-    const response = await api.post<DetectionResponse>(
-      endpoint,
-      formData
+    throw new Error(
+      "Unsupported file type."
     );
 
-    return response.data;
   }
+
+  async upload(
+    file: File,
+    onProgress?: (
+      progress: number
+    ) => void
+  ): Promise<DetectionResponse> {
+
+    if (!file) {
+
+      throw new Error(
+        "No file selected."
+      );
+
+    }
+
+    const endpoint =
+      this.getEndpoint(file);
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "file",
+      file
+    );
+
+    const response =
+      await api.post<DetectionResponse>(
+        endpoint,
+        formData,
+        {
+
+          headers: {
+
+            "Content-Type":
+              "multipart/form-data",
+
+          },
+
+          onUploadProgress: (
+            progressEvent
+          ) => {
+
+            if (
+              !progressEvent.total
+            ) {
+
+              return;
+
+            }
+
+            const progress =
+              Math.round(
+                (
+                  progressEvent.loaded /
+                  progressEvent.total
+                ) * 100
+              );
+
+            onProgress?.(
+              progress
+            );
+
+          },
+
+        }
+      );
+
+    return response.data;
+
+  }
+
 }
 
-export default new UploadService();
+const uploadService =
+  new UploadService();
+
+export default uploadService;

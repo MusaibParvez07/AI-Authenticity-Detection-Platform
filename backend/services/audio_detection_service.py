@@ -5,77 +5,54 @@ from backend.config import AUDIO_DIR
 
 from backend.models.user import User
 
+from backend.ai.audio.inference import (
+    audio_inference,
+)
+
+from backend.ai.audio.model_loader import (
+    audio_loader,
+)
+
+from backend.services.detection_engine import (
+    DetectionEngine,
+)
+
 from backend.services.validation_service import (
     validate_extension,
     validate_file_size,
     ALLOWED_AUDIO_EXTENSIONS,
-    MAX_AUDIO_SIZE
+    MAX_AUDIO_SIZE,
 )
 
-from backend.services.file_service import save_file
+engine = DetectionEngine(
 
-from backend.services.upload_service import create_upload_record
+    inference=audio_inference,
 
-from backend.services.audio_inference import predict_audio
+    metadata_loader=audio_loader,
 
-from backend.services.detection_result_service import (
-    save_detection_result
-)
-
-from backend.services.model_loader import (
-    get_audio_model
 )
 
 
 async def detect_audio(
     db: Session,
     file: UploadFile,
-    current_user: User
+    current_user: User,
 ):
 
     validate_extension(
         file=file,
-        allowed_extensions=ALLOWED_AUDIO_EXTENSIONS
+        allowed_extensions=ALLOWED_AUDIO_EXTENSIONS,
     )
 
     await validate_file_size(
         file=file,
-        max_size=MAX_AUDIO_SIZE
+        max_size=MAX_AUDIO_SIZE,
     )
 
-    path = await save_file(
+    return await engine.detect(
+        db=db,
         file=file,
-        destination=AUDIO_DIR
+        current_user=current_user,
+        destination=AUDIO_DIR,
+        media_type="audio",
     )
-
-    upload_record = create_upload_record(
-        db=db,
-        user_id=current_user.id,
-        filename=file.filename,
-        file_type="audio",
-        file_path=path
-    )
-
-    result = predict_audio(
-        path
-    )
-
-    metadata = get_audio_model()
-
-    detection = save_detection_result(
-        db=db,
-        upload_id=upload_record.id,
-        prediction=result["prediction"],
-        confidence=result["confidence"],
-        model_name=metadata.name,
-        media_type="audio"
-    )
-
-    return {
-        "status": "success",
-        "prediction": result["prediction"],
-        "confidence": result["confidence"],
-        "file_path": path,
-        "upload_id": upload_record.id,
-        "detection_id": detection.id
-    }

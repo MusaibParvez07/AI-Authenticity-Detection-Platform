@@ -14,17 +14,13 @@ export default function LoginForm() {
 
   const { login } = useAuth();
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
   async function handleLogin(
     e: React.FormEvent<HTMLFormElement>
@@ -43,7 +39,8 @@ export default function LoginForm() {
         password
       );
 
-      router.push("/");
+      // Redirect to Dashboard
+      router.push("/dashboard");
 
     } catch (err) {
 
@@ -68,10 +65,14 @@ export default function LoginForm() {
       className="space-y-6"
     >
 
+      {/* Email */}
+
       <div>
 
         <label className="mb-2 block text-sm text-zinc-300">
+
           Email
+
         </label>
 
         <Input
@@ -86,10 +87,14 @@ export default function LoginForm() {
 
       </div>
 
+      {/* Password */}
+
       <div>
 
         <label className="mb-2 block text-sm text-zinc-300">
+
           Password
+
         </label>
 
         <Input
@@ -104,6 +109,8 @@ export default function LoginForm() {
 
       </div>
 
+      {/* Error */}
+
       {error && (
 
         <div className="rounded-xl bg-red-500/10 p-3 text-sm text-red-400">
@@ -113,6 +120,8 @@ export default function LoginForm() {
         </div>
 
       )}
+
+      {/* Submit */}
 
       <Button
         type="submit"
