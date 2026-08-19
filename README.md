@@ -1,369 +1,214 @@
-# AI Authenticity Detection Platform
+# 🧠 AI Authenticity Detection Platform
 
-A full-stack AI-powered platform for detecting potentially manipulated or AI-generated content across multiple modalities, including **images, text, and other supported media**.
+**A full-stack AI platform for detecting AI-generated and manipulated content across text and images — powered by transformer-based NLP, computer vision, and a secure FastAPI backend.**
 
-The project combines machine-learning models with a modern web interface and backend API to provide authenticity analysis, prediction results, confidence information, and supporting evaluation functionality.
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Transformers](https://img.shields.io/badge/🤗%20Transformers-NLP%20%26%20ViT-FFD21E)](https://huggingface.co/transformers/)
+[![Status](https://img.shields.io/badge/Status-Ongoing-yellow)]()
 
-## Features
+---
+
+## 📖 Overview
+
+Generative AI can now produce text and images convincing enough to pass as human-made — which makes telling authentic content from synthetic or manipulated content a growing, real-world problem for platforms, publishers, and moderators.
+
+This project tackles that problem head-on: a **full-stack authenticity detection platform** that unifies **NLP and Vision Transformer models** into a single pipeline to flag AI-generated or manipulated **text and images**, backed by a secure, production-shaped **FastAPI** service and a web interface for submitting content and reviewing results.
+
+> 🚧 **Status: Actively in development.** Core detection pipelines, authentication, and evaluation tooling are functional; model accuracy, multimodal detection, and the frontend experience are being actively refined.
+
+---
+
+## ✨ Key Features
 
 ### 🤖 AI-Based Detection
-
-The platform provides AI-assisted authenticity analysis using dedicated processing pipelines for supported content types.
-
-* Image authenticity detection
-* Text authenticity detection
-* Machine-learning model inference
-* Prediction results and confidence information
-* Dedicated preprocessing pipelines
-* Model loading and inference services
+- Dedicated inference pipelines for **image** and **text** authenticity analysis
+- Prediction results returned with **confidence scores**
+- Modular preprocessing pipelines per content type
+- Centralized model loading and inference services
 
 ### 🖼️ Image Analysis
-
-The image detection pipeline is designed to analyze submitted images and determine whether they are likely to be authentic or manipulated.
-
-The backend includes components for:
-
-* Image preprocessing
-* Model inference
-* Prediction generation
-* Image-related AI services
+- CNN / Vision Transformer-based image classification pipeline
+- Image preprocessing and normalization before inference
+- Flags likely-manipulated or AI-generated images
 
 ### 📝 Text Analysis
+- Transformer-based NLP pipeline for text classification
+- Tokenization and max-length handling for long-form input
+- Distinguishes human-written from AI-generated text
 
-The text analysis pipeline uses transformer-based natural-language processing components.
+### 🔐 Authentication & Security
+- JWT-based access tokens with expiry and validation
+- Password hashing and verification
+- Protected API endpoints via authentication dependencies
+- No secrets committed to source control — environment-variable-driven config
 
-It includes:
-
-* Text preprocessing
-* Tokenization
-* Transformer-based model loading
-* Text classification/inference
-* Maximum text-length handling
-
-### 🔐 Authentication
-
-The backend includes authentication and authorization functionality.
-
-* User registration/login support
-* Password hashing
-* Password verification
-* JWT-based access tokens
-* Protected API endpoints
-* Token validation
-
-### 🌐 REST API
-
-The backend is implemented using **FastAPI** and provides API endpoints for application functionality.
-
-The project contains dedicated API modules for:
-
-* Authentication
-* Detection
-* Application operations
-* Health/status functionality
+### 🌐 REST API (FastAPI)
+- Modular route structure: **auth**, **detection**, **app operations**, **health/status**
+- Auto-generated interactive API docs via FastAPI's OpenAPI integration
+- Pydantic-validated request/response schemas
 
 ### 📊 Evaluation
+- Dedicated evaluation module for benchmarking model performance
+- Structured backend test suite for pipeline reliability
 
-The project includes evaluation-related components for measuring model performance and analyzing detection results.
+---
 
-The backend contains dedicated evaluation functionality for testing and assessing the AI detection pipelines.
+## 🛠️ Tech Stack
 
-## Technology Stack
+| Layer | Technology |
+|---|---|
+| Backend Framework | FastAPI |
+| Language | Python 3.9+ |
+| Deep Learning | PyTorch |
+| NLP / Text Models | 🤗 Transformers, LLMs |
+| Vision Models | CNN, Vision Transformers, OpenCV |
+| Data Validation | Pydantic |
+| Numerical Processing | NumPy |
+| Authentication | JWT, password hashing |
+| Frontend | JavaScript, HTML, CSS |
 
-| Technology                      | Purpose                          |
-| ------------------------------- | -------------------------------- |
-| Python                          | Backend and AI development       |
-| FastAPI                         | REST API framework               |
-| Pydantic                        | Data validation and API schemas  |
-| PyTorch                         | Machine-learning model execution |
-| Transformers                    | Transformer-based NLP models     |
-| OpenCV                          | Image processing                 |
-| NumPy                           | Numerical processing             |
-| JWT                             | Authentication                   |
-| Password Hashing                | Secure credential storage        |
-| JavaScript / Frontend Framework | Web interface                    |
-| HTML / CSS                      | Frontend presentation            |
+---
 
-## Project Structure
+## 🏗️ Architecture
 
-```text
-AI-Authenticity-Detection-Platform/
-├── backend/
-│   ├── ai/
-│   │   ├── image/
-│   │   └── text/
-│   ├── api/
-│   ├── app/
-│   ├── database/
-│   ├── evaluation/
-│   ├── security/
-│   ├── services/
-│   ├── tests/
-│   └── ...
-│
-├── frontend/
-│   └── ...
-│
-├── requirements.txt
-└── README.md
 ```
-
-## Backend
-
-The backend contains the core AI and API functionality.
-
-### AI
-
-The `backend/ai/` directory contains the model-related functionality, including:
-
-* Image processing
-* Text preprocessing
-* Model loading
-* Prediction/inference
-* AI-specific utilities
-
-### API
-
-The `backend/api/` directory contains FastAPI routes for application functionality.
-
-Authentication-related operations include:
-
-* User authentication
-* Login
-* Token generation
-* Protected requests
-
-### Security
-
-The `backend/security/` directory provides authentication and security components.
-
-Important components include:
-
-* Password hashing
-* Password verification
-* JWT token creation
-* JWT token decoding
-* Authentication dependencies
-
-### Database
-
-The `backend/database/` directory contains database-related components used by the application.
-
-### Services
-
-The `backend/services/` directory contains application-level service functionality used by the API and AI components.
-
-### Evaluation
-
-The `backend/evaluation/` directory contains functionality for evaluating and testing model performance.
-
-### Tests
-
-The `backend/tests/` directory contains project tests for supported application functionality.
-
-## Frontend
-
-The `frontend/` directory contains the web interface for interacting with the authenticity detection platform.
-
-The frontend communicates with the backend API to provide users with access to the application's detection and authentication functionality.
-
-## Local Setup
-
-### Requirements
-
-Install:
-
-* Python 3.9+
-* Git
-* A modern web browser
-
-Depending on the models and dependencies used, additional system requirements may be necessary for AI/ML libraries.
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/MusaibParvez07/AI-Authenticity-Detection-Platform.git
-```
-
-Enter the project directory:
-
-```bash
-cd AI-Authenticity-Detection-Platform
-```
-
-### 2. Create a Virtual Environment
-
-Windows:
-
-```cmd
-python -m venv venv
-```
-
-Activate it:
-
-```cmd
-venv\Scripts\activate
-```
-
-Linux/macOS:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configure the Application
-
-Review the configuration files inside the `backend/` directory before starting the application.
-
-Do not commit:
-
-* API keys
-* Passwords
-* Private tokens
-* Production JWT secrets
-* Database credentials
-* Other sensitive configuration
-
-For production use, sensitive values should be supplied through environment variables or another secure configuration mechanism.
-
-### 5. Start the Backend
-
-Start the FastAPI application using the project's backend entry point/configuration.
-
-A typical FastAPI development command is:
-
-```bash
-uvicorn backend.app.main:app --reload
-```
-
-If the project's entry point differs in your local checkout, use the corresponding application module defined under `backend/app/`.
-
-The API will normally be available at:
-
-```text
-http://127.0.0.1:8000
-```
-
-FastAPI documentation is normally available at:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-### 6. Start the Frontend
-
-Open a second terminal and enter the frontend directory:
-
-```bash
-cd frontend
-```
-
-Install the frontend dependencies if a frontend package manager configuration is provided:
-
-```bash
-npm install
-```
-
-Then start the frontend using the project's configured development command.
-
-## Authentication
-
-The application uses JWT-based authentication.
-
-The authentication flow includes:
-
-1. User credentials are submitted to the authentication API.
-2. Passwords are verified using the project's password hashing implementation.
-3. A JWT access token is generated after successful authentication.
-4. Protected API endpoints validate the token.
-5. Invalid or expired tokens are rejected.
-
-The main authentication components are located under:
-
-```text
-backend/api/
-backend/security/
-```
-
-## AI Detection Workflow
-
-The general detection workflow is:
-
-```text
 User Input
     │
     ▼
-Frontend
+Frontend (Web UI)
     │
     ▼
 FastAPI Backend
     │
     ▼
-Input Preprocessing
+Input Preprocessing  ──▶  Text Pipeline (Transformers/NLP)
+    │                 └─▶ Image Pipeline (CNN / ViT)
+    ▼
+Model Inference
     │
     ▼
-AI Model
+Prediction + Confidence Score
     │
     ▼
-Prediction / Classification
-    │
-    ▼
-Confidence / Result
-    │
-    ▼
-Frontend
+Frontend (Results Display)
 ```
 
-Different content types can use their corresponding preprocessing and model pipeline.
+Authentication runs in parallel: credentials → password verification → JWT issuance → protected-route validation on every subsequent request.
 
-## Security
+---
 
-The project includes:
+## 📸 Screenshots
 
-* Password hashing
-* Password verification
-* JWT authentication
-* Protected API routes
-* Authentication dependencies
-* Request validation
+> _Screenshots coming soon — this section will showcase the detection UI, prediction results, and dashboard once available._
 
-For deployment, always replace development/default secrets with strong environment-specific values.
+<!--
+| Home / Upload | Detection Result |
+|---|---|
+| ![Home](Screenshots/home.png) | ![Result](Screenshots/result.png) |
+-->
 
-In particular, never use a publicly committed JWT secret in production.
+---
 
-## Development
+## 📁 Project Structure
 
-For development and testing:
+```
+AI-Authenticity-Detection-Platform/
+├── backend/
+│   ├── ai/
+│   │   ├── image/          # Image preprocessing, CNN/ViT inference
+│   │   └── text/           # Tokenization, transformer inference
+│   ├── api/                # FastAPI routes (auth, detection, health)
+│   ├── app/                # Application entry point
+│   ├── database/           # Database components
+│   ├── evaluation/         # Model evaluation & benchmarking
+│   ├── security/           # JWT, password hashing, auth deps
+│   ├── services/           # Shared application services
+│   └── tests/               # Backend test suite
+├── frontend/                # Web interface
+├── requirements.txt
+└── README.md
+```
 
-* Keep AI models and dependencies compatible with the Python environment.
-* Use a virtual environment.
-* Keep secrets outside source control.
-* Run backend tests before deployment.
-* Validate model performance using the included evaluation functionality.
+---
 
-## 📌 Project Status
+## 🚀 Getting Started
 
-**Status:** Ongoing
+### Requirements
+- Python 3.9+
+- Git
+- A modern web browser
+- (Additional system dependencies may be required for AI/ML libraries)
 
-This project is actively being developed as a full-stack AI platform for analyzing the authenticity of text and image content.
+### 1. Clone the repository
+```bash
+git clone https://github.com/MusaibParvez07/AI-Authenticity-Detection-Platform.git
+cd AI-Authenticity-Detection-Platform
+```
 
-Current development focuses on improving detection pipelines, model evaluation, authentication, and the overall user experience.
+### 2. Create a virtual environment
 
-### Planned Improvements
+**Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-* Additional AI-generated content detection models
-* Improved multimodal detection
-* More detailed confidence analysis
-* Model evaluation dashboards
-* Additional media formats
-* Detection history
-* Improved frontend visualization
-* Automated model benchmarking
-* Production deployment configuration
+**Linux/macOS:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure the application
+Review the configuration files inside `backend/` before starting the app. **Never commit** API keys, passwords, JWT secrets, or database credentials — supply them via environment variables.
+
+### 5. Start the backend
+```bash
+uvicorn backend.app.main:app --reload
+```
+- API: `http://127.0.0.1:8000`
+- Interactive docs: `http://127.0.0.1:8000/docs`
+
+### 6. Start the frontend
+```bash
+cd frontend
+npm install
+```
+Then run the project's configured frontend dev command.
+
+---
+
+## 🔐 Authentication Flow
+
+1. User submits credentials to the auth API
+2. Password is verified via the project's hashing implementation
+3. A JWT access token is issued on success
+4. Protected endpoints validate the token on every request
+5. Invalid or expired tokens are rejected
+
+Core components live under `backend/api/` and `backend/security/`.
+
+---
+
+## 🔭 Roadmap
+
+- [ ] Additional AI-generated content detection models
+- [ ] Improved multimodal detection (combined text + image signals)
+- [ ] Detailed confidence/explainability analysis
+- [ ] Model evaluation dashboards
+- [ ] Support for additional media formats
+- [ ] Detection history and audit trail
+- [ ] Improved frontend visualization
+- [ ] Automated model benchmarking
+- [ ] Production deployment configuration
+
+---
+
+⭐ If you find this project interesting, consider giving it a star!
