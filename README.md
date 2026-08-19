@@ -348,24 +348,21 @@ For development and testing:
 * Run backend tests before deployment.
 * Validate model performance using the included evaluation functionality.
 
-## Project Status
+## 📌 Project Status
 
-**Status: Full-stack AI authenticity detection project transferred and maintained as a portfolio/development project.**
+**Status:** Ongoing
 
-The repository contains both the backend AI/API implementation and frontend application.
+This project is actively being developed as a full-stack AI platform for analyzing the authenticity of text and image content.
 
-The project can be developed and tested locally without requiring a paid cloud service.
+Current development focuses on improving detection pipelines, model evaluation, authentication, and the overall user experience.
 
-## Future Improvements
-
-Potential improvements include:
+### Planned Improvements
 
 * Additional AI-generated content detection models
 * Improved multimodal detection
 * More detailed confidence analysis
-* Improved model evaluation dashboards
-* Additional file and media formats
-* Enhanced authentication and user management
+* Model evaluation dashboards
+* Additional media formats
 * Detection history
 * Improved frontend visualization
 * Automated model benchmarking
