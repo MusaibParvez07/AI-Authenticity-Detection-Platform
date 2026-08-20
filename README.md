@@ -1,6 +1,6 @@
 # 🧠 AI Authenticity Detection Platform
 
-**A full-stack AI platform for detecting AI-generated and manipulated content across text and images — powered by transformer-based NLP, computer vision, and a secure FastAPI backend.**
+**A full-stack AI platform that unifies NLP and Vision Transformers into one pipeline to flag AI-generated and manipulated content across text and images — backed by a secure, production-shaped FastAPI service.**
 
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -208,6 +208,10 @@ Core components live under `backend/api/` and `backend/security/`.
 - [ ] Improved frontend visualization
 - [ ] Automated model benchmarking
 - [ ] Production deployment configuration
+
+---
+
+
 
 ---
 
